@@ -4,8 +4,9 @@
 
 type User {
   id: Int!
+  email: String!
   username: String!
-  password: String!
+  profile_picture_urn: String
 }
 
 type Query {
@@ -20,13 +21,14 @@ type Mutation {
 }
 
 input CreateUserInput {
-  id: Float
   username: String!
   password: String!
+  email: String!
 }
 
 input UpdateUserInput {
-  id: Int!
   username: String
   password: String
+  email: String
+  id: Int!
 }

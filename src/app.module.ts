@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -28,6 +29,8 @@ require('dotenv').config();
       // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+
+    AuthModule,
   ],
   controllers: [],
   providers: [],

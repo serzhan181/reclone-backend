@@ -9,15 +9,21 @@ type User {
   profile_picture_urn: String
 }
 
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
 type Query {
   users: [User!]
-  user(id: Int!): User!
+  user(username: String!): User!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
 }
 
 input CreateUserInput {
@@ -31,4 +37,9 @@ input UpdateUserInput {
   password: String
   email: String
   id: Int!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
 }

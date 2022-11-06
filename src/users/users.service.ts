@@ -48,8 +48,8 @@ export class UsersService {
     return this.userRep.find();
   }
 
-  findOne(id: number) {
-    return this.userRep.findOneBy({ id });
+  findOne(username: string) {
+    return this.userRep.findOneBy({ username });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

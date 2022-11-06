@@ -1,6 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, Length } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 
@@ -13,17 +12,14 @@ export class User {
 
   @Column({ unique: true })
   @Field()
-  @IsEmail()
   email: string;
 
   @Column({ unique: true })
   @Field()
-  @Length(1, 255)
   username: string;
 
   @Column()
   @Exclude()
-  @Length(6, 255)
   password: string;
 
   @Column({ nullable: true })

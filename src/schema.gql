@@ -9,6 +9,11 @@ type User {
   profile_picture_urn: String
 }
 
+type MeResponse {
+  authenticated: Boolean!
+  user: User!
+}
+
 type LoginResponse {
   access_token: String!
   user: User!
@@ -17,6 +22,7 @@ type LoginResponse {
 type Query {
   users: [User!]
   user(username: String!): User!
+  me: MeResponse
 }
 
 type Mutation {
@@ -24,6 +30,7 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
+  logout: Boolean!
 }
 
 input CreateUserInput {

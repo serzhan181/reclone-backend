@@ -27,6 +27,7 @@ export class User {
   profile_picture_urn: string;
 
   @BeforeInsert()
+  @Exclude()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, +process.env.SALT_COUNT);
   }

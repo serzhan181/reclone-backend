@@ -1,10 +1,14 @@
-import { GqlAuthGuard } from './gql-auth.guard';
+import { IPayload } from './../../dist/auth/dto/jwt-payload.d';
+import { LoggedInGuard } from './guards/logged-in.guard';
+
+import { MeResponse } from './dto/me-response';
+import { GqlAuthGuard } from './guards/gql-auth.guard';
 import { LoginResponse } from './dto/login-response';
 import { AuthService } from './auth.service';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LoginUserInput } from './dto/login-user.inputs';
 import { UseGuards } from '@nestjs/common';
-import * as cookie from 'cookie';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {
@@ -14,25 +18,18 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   async login(
     @Args('loginUserInput') _loginUserInput: LoginUserInput,
-    @Context() context,
+    @Context('user') ctx_user: User,
   ) {
-    const { token, user } = await this.authService.login(context.user);
-
-    const res = context.req.res;
-
-    console.log('res', res);
-
-    res?.set(
-      'Set-Cookie',
-      cookie.serialize('token', token, {
-        httpOnly: true,
-        secure: process.env.PROJECT_STATE === 'production',
-        sameSite: 'strict',
-        maxAge: 3600,
-        path: '/',
-      }),
-    );
-
+    const { token, user } = await this.authService.login(ctx_user);
     return { user, access_token: token };
+  }
+
+  @Query(() => MeResponse, { nullable: true, name: 'me' })
+  @UseGuards(LoggedInGuard)
+  me(@Context('user') user: IPayload) {
+    return {
+      authenticated: true,
+      user,
+    };
   }
 }

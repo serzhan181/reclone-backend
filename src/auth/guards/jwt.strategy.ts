@@ -1,4 +1,4 @@
-import { IPayload } from './dto/jwt-payload';
+import { IPayload } from '../dto/jwt-payload';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';

@@ -42,15 +42,6 @@ export class AuthResolver {
 
   @Mutation(() => SignUpResponse)
   async signUp(@Args('signUpInput') signUpInput: CreateUserInput) {
-    const user = await this.usersService.create(signUpInput);
-
-    const access_token = this.authService.createToken({
-      username: user.username,
-      sub: user.id,
-    });
-
-    console.log('user', user);
-
-    return { access_token, user };
+    return this.authService.signUp(signUpInput);
   }
 }

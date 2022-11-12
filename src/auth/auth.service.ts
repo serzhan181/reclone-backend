@@ -1,3 +1,4 @@
+import { CreateUserInput } from './../users/dto/create-user.input';
 import { IPayload } from './dto/jwt-payload';
 import { User } from './../users/entities/user.entity';
 import { UsersService } from './../users/users.service';
@@ -31,6 +32,17 @@ export class AuthService {
     const { password: _, ...result } = user;
 
     return result;
+  }
+
+  async signUp(signUpInput: CreateUserInput) {
+    const user = await this.usersService.create(signUpInput);
+
+    const access_token = this.createToken({
+      username: user.username,
+      sub: user.id,
+    });
+
+    return { access_token, user };
   }
 
   async login(user: User) {

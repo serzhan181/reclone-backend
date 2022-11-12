@@ -1,5 +1,5 @@
 import { User } from './entities/user.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,7 +40,7 @@ export class UsersService {
       return this.userRep.save(user);
     } catch (err) {
       console.log('insdie catch', err);
-      return new Error(JSON.stringify(err));
+      throw new HttpException(JSON.stringify(err), HttpStatus.BAD_REQUEST);
     }
   }
 

@@ -1,6 +1,7 @@
-import { IPayload } from './../../dist/auth/dto/jwt-payload.d';
-import { LoggedInGuard } from './guards/logged-in.guard';
-
+import { CreateUserInput } from './../users/dto/create-user.input';
+import { SignUpResponse } from './dto/signup-response';
+import { UsersService } from './../users/users.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { MeResponse } from './dto/me-response';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
 import { LoginResponse } from './dto/login-response';
@@ -12,7 +13,10 @@ import { User } from 'src/users/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)
@@ -21,15 +25,32 @@ export class AuthResolver {
     @Context('user') ctx_user: User,
   ) {
     const { token, user } = await this.authService.login(ctx_user);
+
     return { user, access_token: token };
   }
 
   @Query(() => MeResponse, { nullable: true, name: 'me' })
-  @UseGuards(LoggedInGuard)
-  me(@Context('user') user: IPayload) {
+  @UseGuards(JwtAuthGuard)
+  me(@Context('req') req) {
+    const user = this.usersService.findOne(req.user.username);
+
     return {
       authenticated: true,
       user,
     };
+  }
+
+  @Mutation(() => SignUpResponse)
+  async signUp(@Args('signUpInput') signUpInput: CreateUserInput) {
+    const user = await this.usersService.create(signUpInput);
+
+    const access_token = this.authService.createToken({
+      username: user.username,
+      sub: user.id,
+    });
+
+    console.log('user', user);
+
+    return { access_token, user };
   }
 }

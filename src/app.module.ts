@@ -20,6 +20,9 @@ require('dotenv').config();
       cors: {
         credentials: true,
         origin: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        allowedHeaders:
+          'Content-Type,Accept,Authorization,Access-Control-Allow-Origin',
       },
     }),
 

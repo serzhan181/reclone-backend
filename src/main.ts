@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { graphqlUploadExpress } from 'graphql-upload-minimal';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -18,6 +19,7 @@ async function bootstrap() {
       'Content-Type,Accept,Authorization,Access-Control-Allow-Origin',
   });
   app.use(cookieParser());
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   await app.listen(+process.env.LOCAL_PORT);
 }

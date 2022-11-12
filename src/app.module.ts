@@ -8,6 +8,7 @@ import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/entities/post.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -38,6 +39,10 @@ require('dotenv').config();
       entities: [User, Post],
       // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
+    }),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
     }),
 
     AuthModule,

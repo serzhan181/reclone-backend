@@ -6,7 +6,7 @@ import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { FileUpload } from 'src/types/file.type';
-import { join, extname, resolve as pathResolve } from 'path';
+import { join, extname } from 'path';
 import { createWriteStream } from 'fs';
 import { makeid } from 'src/helpers/makeId';
 
@@ -29,9 +29,7 @@ export class PostsService {
     const post = this.postRep.create({
       ...createPostInput,
       user,
-      postImgUrn: postImageFilename
-        ? pathResolve(`upload/${postImageFilename}`)
-        : null,
+      postImgUrn: postImageFilename,
     });
 
     return this.postRep.save(post);
@@ -51,7 +49,7 @@ export class PostsService {
 
     return new Promise(async (resolve) => {
       createReadStream()
-        .pipe(createWriteStream(join(process.cwd(), `upload/${newFilename}`)))
+        .pipe(createWriteStream(join(process.cwd(), `public/${newFilename}`)))
         .on('finish', () => resolve(newFilename))
         .on('error', () => {
           new HttpException('Could not save image', HttpStatus.BAD_REQUEST);

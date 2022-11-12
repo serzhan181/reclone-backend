@@ -6,6 +6,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { PostsModule } from './posts/posts.module';
+import { Post } from './posts/entities/post.entity';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -33,12 +35,14 @@ require('dotenv').config();
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      entities: [User],
+      entities: [User, Post],
       // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
 
     AuthModule,
+
+    PostsModule,
   ],
   controllers: [],
   providers: [],

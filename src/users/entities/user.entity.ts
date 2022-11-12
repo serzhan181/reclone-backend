@@ -1,11 +1,19 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
+import { Post } from 'src/posts/entities/post.entity';
 
 @Entity('users')
 @ObjectType()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
@@ -21,6 +29,10 @@ export class User {
   @Column()
   @Exclude()
   password: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  @Field(() => [Post])
+  posts: Post[];
 
   @Column({ nullable: true })
   @Field({ nullable: true })

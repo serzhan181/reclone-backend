@@ -6,7 +6,17 @@ type User {
   id: Int!
   email: String!
   username: String!
+  posts: [Post!]!
   profile_picture_urn: String
+}
+
+type Post {
+  postImgUrn: String
+  identifier: String!
+  title: String!
+  slug: String!
+  body: String!
+  user: User!
 }
 
 type SignUpResponse {
@@ -28,6 +38,8 @@ type Query {
   users: [User!]
   user(username: String!): User!
   me: MeResponse
+  posts: [Post!]!
+  post(id: Int!): Post!
 }
 
 type Mutation {
@@ -36,6 +48,9 @@ type Mutation {
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   signUp(signUpInput: CreateUserInput!): SignUpResponse!
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  removePost(id: Int!): Post!
 }
 
 input CreateUserInput {
@@ -54,4 +69,15 @@ input UpdateUserInput {
 input LoginUserInput {
   username: String!
   password: String!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+}
+
+input UpdatePostInput {
+  title: String
+  body: String
+  id: Int!
 }

@@ -12,7 +12,10 @@ import { makeid } from 'src/helpers/makeId';
 
 @Injectable()
 export class PostsService {
-  constructor(@InjectRepository(Post) private postRep: Repository<Post>) {}
+  constructor(
+    @InjectRepository(Post) private postRep: Repository<Post>,
+    @InjectRepository(User) private usersRep: Repository<User>,
+  ) {}
 
   async create(createPostInput: CreatePostInput, user: User) {
     const { postImg } = createPostInput;
@@ -68,7 +71,22 @@ export class PostsService {
     return `This action updates a #${id} post`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: number, user: User) {
+    const post = await this.postRep.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+    console.log('POST', post);
+
+    const owner = await this.usersRep.findOneByOrFail({ id: post.user.id });
+
+    if (owner.id !== user.id) {
+      throw new HttpException(
+        'You are not the owner of this post.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    return post.remove();
   }
 }

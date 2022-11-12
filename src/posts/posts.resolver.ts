@@ -1,3 +1,4 @@
+import { User } from 'src/users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
 import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
@@ -6,6 +7,7 @@ import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { UseGuards } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -41,7 +43,12 @@ export class PostsResolver {
   }
 
   @Mutation(() => Post)
-  removePost(@Args('id', { type: () => Int }) id: number) {
-    return this.postsService.remove(id);
+  @UseGuards(JwtAuthGuard)
+  async removePost(
+    @Args('id', { type: () => Int }) id: number,
+    @Context('req') req,
+  ) {
+    const user = await this.usersService.findOne(req.user.username);
+    return this.postsService.remove(id, user);
   }
 }

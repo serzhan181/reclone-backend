@@ -11,6 +11,9 @@ type User {
 }
 
 type Post {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   postImgUrn: String
   identifier: String!
   title: String!
@@ -18,6 +21,11 @@ type Post {
   body: String!
   user: User!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type SignUpResponse {
   access_token: String!
@@ -72,7 +80,7 @@ input CreateUserInput {
 
 input CreatePostInput {
   title: String!
-  body: String!
+  body: String
   postImg: Upload
 }
 

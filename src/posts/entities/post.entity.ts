@@ -16,6 +16,10 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @Entity('posts')
 @ObjectType()
 export class Post extends BaseModel {
+  constructor() {
+    super();
+  }
+
   @Exclude()
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })

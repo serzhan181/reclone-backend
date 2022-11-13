@@ -7,7 +7,7 @@ export class CreatePostInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   body: string;
 
   @Field(() => GraphQLUpload, { nullable: true })

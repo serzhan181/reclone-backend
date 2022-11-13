@@ -24,6 +24,8 @@ export class PostsResolver {
   ) {
     const user = await this.usersService.findOne(req.user.username);
 
+    console.log('CREATE POST', createPostInput);
+
     return this.postsService.create(createPostInput, user);
   }
 

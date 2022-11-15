@@ -7,7 +7,7 @@ import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { FileUpload } from 'src/types/file.type';
 import { join, extname } from 'path';
-import { createWriteStream } from 'fs';
+import { createWriteStream, unlinkSync } from 'fs';
 import { makeid } from 'src/helpers/makeId';
 
 @Injectable()
@@ -72,12 +72,15 @@ export class PostsService {
     return `This action updates a #${id} post`;
   }
 
-  async remove(id: number, user: User) {
+  async remove(identifier: string, user: User) {
     const post = await this.postRep.findOne({
-      where: { id },
+      where: { identifier },
       relations: ['user'],
     });
-    console.log('POST', post);
+
+    if (post?.postImgUrn) {
+      unlinkSync(join(__dirname, '..', 'public', post.postImgUrn));
+    }
 
     const owner = await this.usersRep.findOneByOrFail({ id: post.user.id });
 

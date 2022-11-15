@@ -47,10 +47,10 @@ export class PostsResolver {
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
   async removePost(
-    @Args('id', { type: () => Int }) id: number,
+    @Args('identifier', { type: () => String }) identifier: string,
     @Context('req') req,
   ) {
     const user = await this.usersService.findOne(req.user.username);
-    return this.postsService.remove(id, user);
+    return this.postsService.remove(identifier, user);
   }
 }

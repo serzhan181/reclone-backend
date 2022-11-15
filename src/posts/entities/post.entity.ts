@@ -39,7 +39,7 @@ export class Post extends BaseModel {
   slug: string;
 
   @Column({ type: 'text', nullable: true })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   body: string;
 
   @ManyToOne(() => User, (user) => user.posts)

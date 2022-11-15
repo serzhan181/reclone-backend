@@ -18,7 +18,7 @@ type Post {
   identifier: String!
   title: String!
   slug: String!
-  body: String!
+  body: String
   user: User!
 }
 
@@ -57,7 +57,7 @@ type Mutation {
   signUp(signUpInput: CreateUserInput!): SignUpResponse!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
-  removePost(id: Int!): Post!
+  removePost(identifier: String!): Post!
 }
 
 input UpdateUserInput {

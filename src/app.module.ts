@@ -1,13 +1,12 @@
+import { moduleOptions } from './../typeOrm.config';
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
-import { Post } from './posts/entities/post.entity';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -29,17 +28,7 @@ require('dotenv').config();
       },
     }),
 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: +process.env.POSTGRES_PORT,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DATABASE,
-      entities: [User, Post],
-      // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(moduleOptions),
 
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),

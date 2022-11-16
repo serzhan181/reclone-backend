@@ -41,7 +41,7 @@ export class SubsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} sub`;
+    return this.subRep.findOneBy({ id });
   }
 
   update(id: number, updateSubInput: UpdateSubInput) {

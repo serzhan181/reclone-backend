@@ -6,6 +6,7 @@ import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { UseGuards } from '@nestjs/common';
+import { Username } from 'src/decorators/username.decorator';
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -18,9 +19,9 @@ export class PostsResolver {
   @UseGuards(JwtAuthGuard)
   async createPost(
     @Args('createPostInput') createPostInput: CreatePostInput,
-    @Context('req') req,
+    @Username() username: string,
   ) {
-    const user = await this.usersService.findOne(req.user.username);
+    const user = await this.usersService.findOne(username);
 
     console.log('CREATE POST', createPostInput);
 
@@ -46,9 +47,9 @@ export class PostsResolver {
   @UseGuards(JwtAuthGuard)
   async removePost(
     @Args('identifier', { type: () => String }) identifier: string,
-    @Context('req') req,
+    @Username() username: string,
   ) {
-    const user = await this.usersService.findOne(req.user.username);
+    const user = await this.usersService.findOne(username);
     return this.postsService.remove(identifier, user);
   }
 }

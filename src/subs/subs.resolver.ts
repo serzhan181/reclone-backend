@@ -6,6 +6,7 @@ import { UpdateSubInput } from './dto/update-sub.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
+import { Username } from 'src/decorators/username.decorator';
 
 @Resolver(() => Sub)
 export class SubsResolver {
@@ -18,9 +19,9 @@ export class SubsResolver {
   @Mutation(() => Sub)
   async createSub(
     @Args('createSubInput') createSubInput: CreateSubInput,
-    @Context('req') req,
+    @Username() username: string,
   ) {
-    const creator = await this.usersService.findOne(req.user.username);
+    const creator = await this.usersService.findOne(username);
 
     return this.subsService.create(createSubInput, creator);
   }

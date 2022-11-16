@@ -14,8 +14,8 @@ import { Post } from 'src/posts/entities/post.entity';
 @Entity('subs')
 @ObjectType()
 export class Sub extends BaseModel {
-  @Index()
   @Field(() => String)
+  @Index()
   @Column({ unique: true })
   name: string;
 
@@ -29,14 +29,18 @@ export class Sub extends BaseModel {
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
-  postImgUrn: string;
+  subImgUrn: string;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
   bannerUrn: string;
 
+  @Column()
+  @Field(() => String)
+  creator_name: string;
+
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @JoinColumn({ name: 'creator_name', referencedColumnName: 'username' })
   @Field(() => User)
   creator: User;
 

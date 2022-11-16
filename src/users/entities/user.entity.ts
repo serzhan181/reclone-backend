@@ -14,10 +14,6 @@ import { Post } from 'src/posts/entities/post.entity';
 @Entity('users')
 @ObjectType()
 export class User extends BaseEntity {
-  constructor() {
-    super();
-  }
-
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;

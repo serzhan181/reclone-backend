@@ -12,8 +12,8 @@ export const moduleOptions: DataSourceOptions = {
   database: process.env.POSTGRES_DATABASE,
   entities: ['dist/**/**/entities/*.entity.js'],
   // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  synchronize: process.env.NODE_ENV !== 'production',
-  migrations: ['src/migrations/*.js'],
+  synchronize: false,
+  migrations: ['dist/src/migrations/*.js'],
 };
 
 export default new DataSource(moduleOptions);

@@ -20,10 +20,6 @@ import { Vote } from 'src/votes/entities/vote.entity';
 @Entity('posts')
 @ObjectType()
 export class Post extends BaseModel {
-  constructor() {
-    super();
-  }
-
   @Exclude()
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
@@ -50,20 +46,26 @@ export class Post extends BaseModel {
   @Field(() => String)
   subName: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @Column()
+  @Field(() => String)
+  username: string;
+
+  @ManyToOne(() => User, (user) => user.posts, { nullable: false })
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   @Field(() => User)
   user: User;
 
+  @Field(() => Sub)
   @ManyToOne(() => Sub, (sub) => sub.posts)
   @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
-  @Field(() => Sub)
   sub: Sub;
 
+  @Exclude()
   @OneToMany(() => Comment, (comment) => comment.post)
   @Field(() => [Comment])
   comments: Comment[];
 
+  @Exclude()
   @OneToMany(() => Vote, (vote) => vote.post)
   votes: Vote[];
 

@@ -15,6 +15,7 @@ import { slugify } from '../../helpers/slugify';
 import { Exclude } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Vote } from 'src/votes/entities/vote.entity';
 
 @Entity('posts')
 @ObjectType()
@@ -62,6 +63,9 @@ export class Post extends BaseModel {
   @OneToMany(() => Comment, (comment) => comment.post)
   @Field(() => [Comment])
   comments: Comment[];
+
+  @OneToMany(() => Vote, (vote) => vote.post)
+  votes: Vote[];
 
   @BeforeInsert()
   makeIdAndSlug() {

@@ -10,6 +10,7 @@ import { PostsModule } from './posts/posts.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SubsModule } from './subs/subs.module';
 import { CommentsModule } from './comments/comments.module';
+import { VotesModule } from './votes/votes.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -43,6 +44,8 @@ require('dotenv').config();
     SubsModule,
 
     CommentsModule,
+
+    VotesModule,
   ],
   controllers: [],
   providers: [],

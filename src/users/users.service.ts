@@ -4,8 +4,6 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { validate } from 'class-validator';
-import { parseValidationErrors } from 'src/helpers/parseValidationErrors';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +11,7 @@ export class UsersService {
 
   async create({ username, password, email }: CreateUserInput) {
     try {
-      let errors: any = {};
+      const errors: any = {};
       const usernameExists = await this.userRep.findOneBy({ username });
       const emailExists = await this.userRep.findOneBy({ email });
 
@@ -29,8 +27,6 @@ export class UsersService {
         email,
         password,
       });
-      const validationErrors = await validate(user);
-      errors = parseValidationErrors(validationErrors);
 
       if (Object.keys(errors).length) {
         console.log('errors', errors);

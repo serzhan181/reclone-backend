@@ -1,3 +1,4 @@
+import { Sub } from './../../subs/entities/sub.entity';
 import {
   BeforeInsert,
   Column,
@@ -42,10 +43,19 @@ export class Post extends BaseModel {
   @Field(() => String, { nullable: true })
   body: string;
 
+  @Column()
+  @Field(() => String)
+  subName: string;
+
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   @Field(() => User)
   user: User;
+
+  @ManyToOne(() => Sub, (sub) => sub.posts)
+  @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
+  @Field(() => Sub)
+  sub: Sub;
 
   @BeforeInsert()
   makeIdAndSlug() {

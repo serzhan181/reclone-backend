@@ -1,3 +1,4 @@
+import { Sub } from './../subs/entities/sub.entity';
 import { User } from 'src/users/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,10 +16,11 @@ export class PostsService {
   constructor(
     @InjectRepository(Post) private postRep: Repository<Post>,
     @InjectRepository(User) private usersRep: Repository<User>,
+    @InjectRepository(Sub) private subRep: Repository<Sub>,
   ) {}
 
   async create(createPostInput: CreatePostInput, user: User) {
-    const { postImg } = createPostInput;
+    const { postImg, subName } = createPostInput;
     let postImageFilename: string | null = null;
 
     if (Boolean(postImg)) {
@@ -26,9 +28,12 @@ export class PostsService {
       postImageFilename = filename;
     }
 
+    const sub = await this.subRep.findOneByOrFail({ name: subName });
+
     const post = this.postRep.create({
       ...createPostInput,
       user,
+      sub,
       postImgUrn: postImageFilename,
     });
 

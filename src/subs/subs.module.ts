@@ -1,21 +1,21 @@
-import { Sub } from './../subs/entities/sub.entity';
+import { Sub } from './entities/sub.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Post } from './entities/post.entity';
+import { Post } from 'src/posts/entities/post.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './../users/users.module';
 import { Module } from '@nestjs/common';
-import { PostsService } from './posts.service';
-import { PostsResolver } from './posts.resolver';
+import { SubsService } from './subs.service';
+import { SubsResolver } from './subs.resolver';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, User, Sub]),
-    UsersModule,
+    TypeOrmModule.forFeature([Sub]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
     }),
+    UsersModule,
   ],
-  providers: [PostsResolver, PostsService],
+  providers: [SubsResolver, SubsService],
 })
-export class PostsModule {}
+export class SubsModule {}

@@ -8,6 +8,7 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { SubsModule } from './subs/subs.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -37,6 +38,8 @@ require('dotenv').config();
     AuthModule,
 
     PostsModule,
+
+    SubsModule,
   ],
   controllers: [],
   providers: [],

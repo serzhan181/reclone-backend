@@ -10,7 +10,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LoginUserInput } from './dto/login-user.inputs';
 import { UseGuards } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
-import { Username } from 'src/decorators/user.decorator';
+import { Username } from 'src/decorators/username.decorator';
 
 @Resolver()
 export class AuthResolver {

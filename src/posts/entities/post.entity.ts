@@ -1,4 +1,5 @@
 import { Sub } from './../../subs/entities/sub.entity';
+import { Comment } from './../../comments/entities/comment.entity';
 import {
   BeforeInsert,
   Column,
@@ -6,6 +7,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { BaseModel } from '../../entities/base-entity';
 import { makeid } from '../../helpers/makeId';
@@ -56,6 +58,10 @@ export class Post extends BaseModel {
   @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
   @Field(() => Sub)
   sub: Sub;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  @Field(() => [Comment])
+  comments: Comment[];
 
   @BeforeInsert()
   makeIdAndSlug() {

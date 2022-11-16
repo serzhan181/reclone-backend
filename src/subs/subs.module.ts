@@ -1,6 +1,4 @@
 import { Sub } from './entities/sub.entity';
-import { User } from 'src/users/entities/user.entity';
-import { Post } from 'src/posts/entities/post.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './../users/users.module';
 import { Module } from '@nestjs/common';

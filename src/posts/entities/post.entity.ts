@@ -12,9 +12,9 @@ import {
 import { BaseModel } from '../../entities/base-entity';
 import { makeid } from '../../helpers/makeId';
 import { slugify } from '../../helpers/slugify';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { Vote } from 'src/votes/entities/vote.entity';
 
 @Entity('posts')
@@ -67,11 +67,32 @@ export class Post extends BaseModel {
 
   @Exclude()
   @OneToMany(() => Vote, (vote) => vote.post)
+  @Field(() => [Vote])
   votes: Vote[];
 
   @BeforeInsert()
   makeIdAndSlug() {
     this.identifier = makeid(6);
     this.slug = slugify(this.title);
+  }
+
+  @Field(() => Int)
+  @Expose()
+  get commentCount(): number {
+    return this.comments?.length;
+  }
+
+  @Field(() => Int)
+  @Expose()
+  get voteScore(): number {
+    return this.votes?.reduce((prev, cur) => prev + (cur.value || 0), 0) || 0;
+  }
+
+  // Check if current user vote value
+  @Field(() => Int)
+  userVote: number;
+  setUserVote(user: User) {
+    const index = this.votes?.findIndex((v) => v.username === user.username);
+    this.userVote = index > -1 ? this.votes[index].value : 0;
   }
 }

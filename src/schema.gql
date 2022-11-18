@@ -2,11 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Comment {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  body: String!
+  username: String!
+  userVote: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Vote {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  value: Int!
+  user: User!
+  username: String!
+  post: Post!
+  comment: Comment!
+}
+
 type User {
   id: Int!
   email: String!
   username: String!
   posts: [Post!]!
+  votes: [Vote!]!
   profile_picture_urn: String
 }
 
@@ -24,31 +50,6 @@ type Sub {
   posts: [Post!]!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Vote {
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  likes: Int!
-  dislikes: Int!
-  user: User!
-  username: String!
-  post: Post!
-  comment: Comment!
-}
-
-type Comment {
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  body: String!
-  username: String!
-}
-
 type Post {
   id: Int!
   createdAt: DateTime!
@@ -63,6 +64,10 @@ type Post {
   user: User!
   sub: Sub!
   comments: [Comment!]!
+  votes: [Vote!]!
+  commentCount: Int!
+  voteScore: Int!
+  userVote: Int!
 }
 
 type SignUpResponse {
@@ -106,7 +111,7 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
-  vote(voteInput: VoteInput!): Vote!
+  vote(voteInput: VoteInput!): Post!
 }
 
 input UpdateUserInput {
@@ -176,6 +181,7 @@ input UpdateCommentInput {
 }
 
 input VoteInput {
-  commentId: String
-  postId: String
+  commentId: Int
+  postId: Int
+  value: Int!
 }

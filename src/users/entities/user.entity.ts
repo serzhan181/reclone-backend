@@ -10,6 +10,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Post } from 'src/posts/entities/post.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 
 @Entity('users')
 @ObjectType()
@@ -33,6 +34,10 @@ export class User extends BaseEntity {
   @OneToMany(() => Post, (post) => post.user)
   @Field(() => [Post])
   posts: Post[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  @Field(() => [Vote])
+  votes: Vote[];
 
   @Column({ nullable: true })
   @Field({ nullable: true })

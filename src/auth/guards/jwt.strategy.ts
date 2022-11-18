@@ -1,14 +1,15 @@
-import { IPayload } from '../dto/jwt-payload';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from './../../users/users.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private usersService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -16,7 +17,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: IPayload) {
-    return { userId: payload.sub, username: payload.username };
+  async validate(user: User) {
+    const userExists = await this.usersService.findOne(user.username);
+
+    if (!userExists) throw new UnauthorizedException();
+    return user;
   }
 }

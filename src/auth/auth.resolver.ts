@@ -10,7 +10,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { LoginUserInput } from './dto/login-user.inputs';
 import { UseGuards } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
-import { Username } from 'src/decorators/username.decorator';
+import { UserDecorator } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -32,8 +32,7 @@ export class AuthResolver {
 
   @Query(() => MeResponse, { nullable: true, name: 'me' })
   @UseGuards(JwtAuthGuard)
-  me(@Username() username: string) {
-    const user = this.usersService.findOne(username);
+  me(@UserDecorator() user: User) {
     return {
       authenticated: true,
       user,

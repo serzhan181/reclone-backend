@@ -6,7 +6,8 @@ import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
 import { UseGuards } from '@nestjs/common';
-import { Username } from 'src/decorators/username.decorator';
+import { UserDecorator } from 'src/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -19,10 +20,8 @@ export class CommentsResolver {
   @Mutation(() => Comment)
   async createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
-    @Username() username: string,
+    @UserDecorator() user: User,
   ) {
-    const user = await this.usersService.findOne(username);
-
     console.log('COMMENT USER', user);
     return this.commentsService.create(createCommentInput, user);
   }

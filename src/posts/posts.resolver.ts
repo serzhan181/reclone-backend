@@ -1,3 +1,4 @@
+import { User } from 'src/users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
 import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
@@ -6,7 +7,8 @@ import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { UseGuards } from '@nestjs/common';
-import { Username } from 'src/decorators/username.decorator';
+import { UserDecorator } from 'src/decorators/user.decorator';
+import { OptionalJwtAuthGuard } from 'src/auth/guards/optional-jwt-auth.guard';
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -19,10 +21,8 @@ export class PostsResolver {
   @UseGuards(JwtAuthGuard)
   async createPost(
     @Args('createPostInput') createPostInput: CreatePostInput,
-    @Username() username: string,
+    @UserDecorator() user: User,
   ) {
-    const user = await this.usersService.findOne(username);
-
     console.log('CREATE POST', createPostInput);
 
     return this.postsService.create(createPostInput, user);
@@ -33,9 +33,13 @@ export class PostsResolver {
     return this.postsService.findAll();
   }
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Query(() => Post, { name: 'post' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.postsService.findOne(id);
+  findOne(
+    @Args('id', { type: () => Int }) id: number,
+    @UserDecorator() user: User,
+  ) {
+    return this.postsService.findOne(id, user);
   }
 
   @Mutation(() => Post)
@@ -47,7 +51,7 @@ export class PostsResolver {
   @UseGuards(JwtAuthGuard)
   async removePost(
     @Args('identifier', { type: () => String }) identifier: string,
-    @Username() username: string,
+    @UserDecorator() username: string,
   ) {
     const user = await this.usersService.findOne(username);
     return this.postsService.remove(identifier, user);

@@ -1,4 +1,5 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { User } from 'src/users/entities/user.entity';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { SubsService } from './subs.service';
 import { Sub } from './entities/sub.entity';
 import { CreateSubInput } from './dto/create-sub.input';
@@ -6,7 +7,7 @@ import { UpdateSubInput } from './dto/update-sub.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
-import { Username } from 'src/decorators/username.decorator';
+import { UserDecorator } from 'src/decorators/user.decorator';
 
 @Resolver(() => Sub)
 export class SubsResolver {
@@ -19,10 +20,8 @@ export class SubsResolver {
   @Mutation(() => Sub)
   async createSub(
     @Args('createSubInput') createSubInput: CreateSubInput,
-    @Username() username: string,
+    @UserDecorator() creator: User,
   ) {
-    const creator = await this.usersService.findOne(username);
-
     return this.subsService.create(createSubInput, creator);
   }
 

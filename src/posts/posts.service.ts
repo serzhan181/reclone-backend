@@ -10,6 +10,7 @@ import { FileUpload } from 'src/types/file.type';
 import { join, extname } from 'path';
 import { createWriteStream, unlinkSync } from 'fs';
 import { makeid } from 'src/helpers/makeId';
+import { setUsersVoteOnPost } from 'src/helpers/set-users-vote-post';
 
 @Injectable()
 export class PostsService {
@@ -69,8 +70,14 @@ export class PostsService {
     });
   }
 
-  findOne(id: number) {
-    return this.postRep.findOneBy({ id });
+  async findOne(id: number, user: User) {
+    const post = await this.postRep.findOne({
+      where: { id },
+      relations: ['comments', 'comments.votes', 'votes'],
+    });
+
+    setUsersVoteOnPost(post, user);
+    return post;
   }
 
   update(id: number, updatePostInput: UpdatePostInput) {

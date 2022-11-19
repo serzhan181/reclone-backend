@@ -11,6 +11,8 @@ import { join, extname } from 'path';
 import { createWriteStream, unlinkSync } from 'fs';
 import { makeid } from 'src/helpers/makeId';
 import { setUsersVoteOnPost } from 'src/helpers/set-users-vote-post';
+import { Vote } from 'src/votes/entities/vote.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 @Injectable()
 export class PostsService {
@@ -87,23 +89,25 @@ export class PostsService {
     return `This action updates a #${id} post`;
   }
 
-  async remove(identifier: string, user: User) {
+  async remove(id: number, user: User) {
     const post = await this.postRep.findOne({
-      where: { identifier },
+      where: { id },
       relations: ['user'],
     });
 
-    if (post?.postImgUrn) {
-      unlinkSync(join(__dirname, '..', 'public', post.postImgUrn));
-    }
-
     const owner = await this.usersRep.findOneByOrFail({ id: post.user.id });
+
+    console.log('USER', user);
 
     if (owner.id !== user.id) {
       throw new HttpException(
         'You are not the owner of this post.',
         HttpStatus.FORBIDDEN,
       );
+    }
+
+    if (post?.postImgUrn) {
+      unlinkSync(join(__dirname, '..', 'public', post.postImgUrn));
     }
 
     return post.remove();

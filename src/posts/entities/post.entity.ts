@@ -61,12 +61,12 @@ export class Post extends BaseModel {
   sub: Sub;
 
   @Exclude()
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, { onDelete: 'CASCADE' })
   @Field(() => [Comment])
   comments: Comment[];
 
   @Exclude()
-  @OneToMany(() => Vote, (vote) => vote.post)
+  @OneToMany(() => Vote, (vote) => vote.post, { onDelete: 'CASCADE' })
   @Field(() => [Vote])
   votes: Vote[];
 

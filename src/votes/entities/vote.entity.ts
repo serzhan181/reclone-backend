@@ -21,11 +21,11 @@ export class Vote extends BaseModel {
   @Field(() => String)
   username: string;
 
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, { onDelete: 'CASCADE' })
   @Field(() => Post)
   post: Post;
 
-  @ManyToOne(() => Comment)
+  @ManyToOne(() => Comment, { onDelete: 'CASCADE' })
   @Field(() => Comment)
   comment: Comment;
 }

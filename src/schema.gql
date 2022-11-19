@@ -104,7 +104,7 @@ type Mutation {
   signUp(signUpInput: CreateUserInput!): SignUpResponse!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
-  removePost(identifier: String!): Post!
+  removePost(id: Int!): Post!
   createSub(createSubInput: CreateSubInput!): Sub!
   updateSub(updateSubInput: UpdateSubInput!): Sub!
   removeSub(id: Int!): Sub!

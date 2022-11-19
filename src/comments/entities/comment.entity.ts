@@ -20,10 +20,13 @@ export class Comment extends BaseModel {
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
 
-  @ManyToOne(() => Post, (post) => post.comments, { nullable: false })
+  @ManyToOne(() => Post, (post) => post.comments, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   post: Post;
 
-  @OneToMany(() => Vote, (vote) => vote.comment)
+  @OneToMany(() => Vote, (vote) => vote.comment, { onDelete: 'CASCADE' })
   votes: Vote[];
 
   // Check if current user vote value

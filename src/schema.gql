@@ -67,7 +67,7 @@ type Post {
   votes: [Vote!]!
   commentCount: Int!
   voteScore: Int!
-  userVote: Int!
+  userVote: Int
 }
 
 type SignUpResponse {

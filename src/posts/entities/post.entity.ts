@@ -79,7 +79,7 @@ export class Post extends BaseModel {
   @Field(() => Int)
   @Expose()
   get commentCount(): number {
-    return this.comments?.length;
+    return this.comments?.length || 0;
   }
 
   @Field(() => Int)
@@ -89,7 +89,7 @@ export class Post extends BaseModel {
   }
 
   // Check if current user vote value
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   userVote: number;
   setUserVote(user: User) {
     const index = this.votes?.findIndex((v) => v.username === user.username);

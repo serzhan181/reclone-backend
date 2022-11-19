@@ -1,7 +1,7 @@
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
@@ -28,9 +28,10 @@ export class PostsResolver {
     return this.postsService.create(createPostInput, user);
   }
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Query(() => [Post], { name: 'posts' })
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@UserDecorator() user: User) {
+    return this.postsService.findAll(user);
   }
 
   @UseGuards(OptionalJwtAuthGuard)

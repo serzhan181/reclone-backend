@@ -34,7 +34,7 @@ require('dotenv').config();
     TypeOrmModule.forRoot(moduleOptions),
 
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
     }),
 
     AuthModule,

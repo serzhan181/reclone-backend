@@ -6,6 +6,7 @@ export const setUsersVoteOnPost = (
   user: User,
   isSetVoteOnComments = false,
 ) => {
+  if (!user) return post;
   post.setUserVote(user);
   if (isSetVoteOnComments) {
     post.comments.forEach((c) => c.setUserVote(user));

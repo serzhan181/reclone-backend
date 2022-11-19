@@ -41,13 +41,6 @@ export class PostsService {
     return this.postRep.save(post);
   }
 
-  findAll() {
-    return this.postRep.find({
-      relations: ['user'],
-      order: { createdAt: 'DESC' },
-    });
-  }
-
   async uploadPostImg(postImg: Promise<FileUpload>): Promise<string> {
     const { filename, createReadStream, mimetype } = await postImg;
     if (!['image/jpeg', 'image/png'].includes(mimetype)) {
@@ -68,6 +61,16 @@ export class PostsService {
           new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
         });
     });
+  }
+
+  async findAll(user: User) {
+    const posts = await this.postRep.find({
+      relations: ['user', 'votes'],
+      order: { createdAt: 'DESC' },
+    });
+
+    posts.forEach((p) => p.setUserVote(user));
+    return posts;
   }
 
   async findOne(id: number, user: User) {

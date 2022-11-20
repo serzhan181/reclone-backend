@@ -90,11 +90,16 @@ type Query {
   user(username: String!): User!
   me: MeResponse
   posts: [Post!]!
-  post(id: Int!): Post!
+  post(getSinglePost: GetSinglePost!): Post!
   subs: [Sub!]!
   sub(id: Int!): Sub!
   comments: [Comment!]!
   comment(id: Int!): Comment!
+}
+
+input GetSinglePost {
+  identifier: String!
+  slug: String!
 }
 
 type Mutation {

@@ -33,7 +33,7 @@ export class UsersService {
         throw { errors };
       }
 
-      return this.userRep.save(user);
+      return await this.userRep.save(user);
     } catch (err) {
       console.log('insdie catch', err);
       throw new HttpException(JSON.stringify(err), HttpStatus.BAD_REQUEST);

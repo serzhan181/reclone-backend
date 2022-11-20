@@ -1,3 +1,4 @@
+import { GetSinglePost } from './dto/get-single-post';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from './../users/users.service';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
@@ -37,10 +38,10 @@ export class PostsResolver {
   @UseGuards(OptionalJwtAuthGuard)
   @Query(() => Post, { name: 'post' })
   findOne(
-    @Args('id', { type: () => Int }) id: number,
+    @Args('getSinglePost') { identifier, slug }: GetSinglePost,
     @UserDecorator() user: User,
   ) {
-    return this.postsService.findOne(id, user);
+    return this.postsService.findOne(identifier, slug, user);
   }
 
   @Mutation(() => Post)

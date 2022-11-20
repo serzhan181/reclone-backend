@@ -67,7 +67,7 @@ export class PostsService {
 
   async findAll(user: User) {
     const posts = await this.postRep.find({
-      relations: ['user', 'votes'],
+      relations: ['user', 'votes', 'comments', 'comments.votes'],
       order: { createdAt: 'DESC' },
     });
 
@@ -75,10 +75,10 @@ export class PostsService {
     return posts;
   }
 
-  async findOne(id: number, user: User) {
+  async findOne(identifier: string, slug: string, user: User) {
     const post = await this.postRep.findOne({
-      where: { id },
-      relations: ['comments', 'comments.votes', 'votes'],
+      where: { identifier, slug },
+      relations: ['comments', 'comments.votes', 'votes', 'user'],
     });
 
     setUsersVoteOnPost(post, user);

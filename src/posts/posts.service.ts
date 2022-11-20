@@ -79,9 +79,10 @@ export class PostsService {
     const post = await this.postRep.findOne({
       where: { identifier, slug },
       relations: ['comments', 'comments.votes', 'votes', 'user'],
+      order: { comments: { createdAt: 'DESC' } },
     });
 
-    setUsersVoteOnPost(post, user);
+    setUsersVoteOnPost(post, user, true);
     return post;
   }
 

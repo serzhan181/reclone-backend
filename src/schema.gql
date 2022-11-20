@@ -8,7 +8,8 @@ type Comment {
   updatedAt: DateTime!
   body: String!
   username: String!
-  userVote: Int!
+  voteScore: Int!
+  userVote: Int
 }
 
 """

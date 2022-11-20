@@ -90,7 +90,7 @@ export class Post extends BaseModel {
 
   // Check if current user vote value
   @Field(() => Int, { nullable: true })
-  userVote: number;
+  protected userVote: number;
   setUserVote(user: User) {
     const index = this.votes?.findIndex((v) => v.username === user.username);
     this.userVote = index > -1 ? this.votes[index].value : 0;

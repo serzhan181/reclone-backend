@@ -4,6 +4,7 @@ import { User } from './../../users/entities/user.entity';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BaseModel } from 'src/entities/base-entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 @Entity('comments')
 @ObjectType()
@@ -29,8 +30,14 @@ export class Comment extends BaseModel {
   @OneToMany(() => Vote, (vote) => vote.comment, { onDelete: 'CASCADE' })
   votes: Vote[];
 
-  // Check if current user vote value
   @Field(() => Int)
+  @Expose()
+  get voteScore(): number {
+    return this.votes?.reduce((prev, cur) => prev + (cur.value || 0), 0) || 0;
+  }
+
+  // Check if current user vote value
+  @Field(() => Int, { nullable: true })
   protected userVote: number;
   setUserVote(user: User) {
     const index = this.votes?.findIndex((v) => v.username === user.username);

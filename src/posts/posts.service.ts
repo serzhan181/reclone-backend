@@ -61,6 +61,10 @@ export class PostsService {
     return post;
   }
 
+  findPostsBySubname(subName: string) {
+    return this.postRep.find({ where: { subName }, relations: ['user'] });
+  }
+
   update(id: number, updatePostInput: UpdatePostInput) {
     return `This action updates a #${id} post`;
   }

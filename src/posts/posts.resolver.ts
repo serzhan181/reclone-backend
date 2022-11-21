@@ -44,6 +44,11 @@ export class PostsResolver {
     return this.postsService.findOne(identifier, slug, user);
   }
 
+  @Query(() => [Post], { name: 'postsBySubName' })
+  findPostsBySubname(@Args('subName', { type: () => String }) subName: string) {
+    return this.postsService.findPostsBySubname(subName);
+  }
+
   @Mutation(() => Post)
   updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
     return this.postsService.update(updatePostInput.id, updatePostInput);

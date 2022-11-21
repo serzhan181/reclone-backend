@@ -92,6 +92,7 @@ type Query {
   me: MeResponse
   posts: [Post!]!
   post(getSinglePost: GetSinglePost!): Post!
+  postsBySubName(subName: String!): [Post!]!
   subs: [Sub!]!
   sub(name: String!): Sub!
   comments: [Comment!]!

@@ -93,7 +93,7 @@ type Query {
   posts: [Post!]!
   post(getSinglePost: GetSinglePost!): Post!
   subs: [Sub!]!
-  sub(id: Int!): Sub!
+  sub(name: String!): Sub!
   comments: [Comment!]!
   comment(id: Int!): Comment!
 }
@@ -112,6 +112,7 @@ type Mutation {
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: Int!): Post!
   createSub(createSubInput: CreateSubInput!): Sub!
+  uploadSubImages(uploadSubImages: UploadSubImages!): Sub!
   updateSub(updateSubInput: UpdateSubInput!): Sub!
   removeSub(id: Int!): Sub!
   createComment(createCommentInput: CreateCommentInput!): Comment!
@@ -162,6 +163,12 @@ input CreateSubInput {
   title: String!
   subImg: Upload
   bannerImg: Upload
+}
+
+input UploadSubImages {
+  name: String!
+  bannerImg: Upload
+  subImg: Upload
 }
 
 input UpdateSubInput {

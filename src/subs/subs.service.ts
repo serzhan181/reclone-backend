@@ -5,6 +5,12 @@ import { CreateSubInput } from './dto/create-sub.input';
 import { UpdateSubInput } from './dto/update-sub.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UploadSubImages } from './dto/upload-sub-images';
+import { join } from 'path';
+import { unlinkSync } from 'fs';
+import { uploadImg } from 'src/helpers/uploadImg';
+
+const publicSubs = join(__dirname, '..', '..', '..', 'public', 'subs');
 
 @Injectable()
 export class SubsService {
@@ -40,8 +46,51 @@ export class SubsService {
     return this.subRep.find();
   }
 
-  findOne(id: number) {
-    return this.subRep.findOneBy({ id });
+  findOneByName(name: string) {
+    return this.subRep.findOneBy({ name });
+  }
+
+  async uploadSubImages({ name, bannerImg, subImg }: UploadSubImages) {
+    const sub = await this.subRep.findOneByOrFail({ name });
+
+    if (!bannerImg && !subImg) {
+      return this.findOneByName(name);
+    }
+
+    let bannerUrn: string | null = null;
+    let subUrn: string | null = null;
+
+    if (Boolean(bannerImg)) {
+      // delete previous image if exists
+      const oldFilename = sub.bannerUrn;
+      if (oldFilename) {
+        unlinkSync(join(publicSubs, oldFilename));
+      }
+
+      const filename = await uploadImg(bannerImg, 'subs');
+      bannerUrn = filename;
+    }
+
+    if (Boolean(subImg)) {
+      const oldFilename = sub.subImgUrn;
+      if (oldFilename) {
+        unlinkSync(join(publicSubs, oldFilename));
+      }
+
+      const filename = await uploadImg(subImg, 'subs');
+      subUrn = filename;
+    }
+
+    const updatedSub = await this.subRep
+      .createQueryBuilder()
+      .update()
+      .set({ bannerUrn, subImgUrn: subUrn })
+      .where('name = :name', { name })
+      .execute();
+
+    console.log('UPDATED RESULT', updatedSub);
+
+    return this.subRep.findOneBy({ name });
   }
 
   update(id: number, updateSubInput: UpdateSubInput) {

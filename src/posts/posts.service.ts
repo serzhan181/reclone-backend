@@ -42,7 +42,7 @@ export class PostsService {
 
   async findAll(user: User) {
     const posts = await this.postRep.find({
-      relations: ['user', 'votes', 'comments', 'comments.votes'],
+      relations: ['user', 'votes', 'comments', 'comments.votes', 'sub'],
       order: { createdAt: 'DESC' },
     });
 
@@ -53,7 +53,7 @@ export class PostsService {
   async findOne(identifier: string, slug: string, user: User) {
     const post = await this.postRep.findOne({
       where: { identifier, slug },
-      relations: ['comments', 'comments.votes', 'votes', 'user'],
+      relations: ['comments', 'comments.votes', 'votes', 'user', 'sub'],
       order: { comments: { createdAt: 'DESC' } },
     });
 
@@ -61,8 +61,14 @@ export class PostsService {
     return post;
   }
 
-  findPostsBySubname(subName: string) {
-    return this.postRep.find({ where: { subName }, relations: ['user'] });
+  async findPostsBySubname(subName: string, user: User) {
+    const posts = await this.postRep.find({
+      where: { subName },
+      relations: ['comments', 'comments.votes', 'votes', 'user', 'sub'],
+    });
+
+    posts.forEach((p) => p.setUserVote(user));
+    return posts;
   }
 
   update(id: number, updatePostInput: UpdatePostInput) {

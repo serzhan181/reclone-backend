@@ -69,6 +69,8 @@ type Post {
   commentCount: Int!
   voteScore: Int!
   userVote: Int
+  postImgUrl: String
+  subImgUrl: String
 }
 
 type SignUpResponse {

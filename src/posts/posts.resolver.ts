@@ -44,9 +44,13 @@ export class PostsResolver {
     return this.postsService.findOne(identifier, slug, user);
   }
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Query(() => [Post], { name: 'postsBySubName' })
-  findPostsBySubname(@Args('subName', { type: () => String }) subName: string) {
-    return this.postsService.findPostsBySubname(subName);
+  findPostsBySubname(
+    @Args('subName', { type: () => String }) subName: string,
+    @UserDecorator() user: User,
+  ) {
+    return this.postsService.findPostsBySubname(subName, user);
   }
 
   @Mutation(() => Post)

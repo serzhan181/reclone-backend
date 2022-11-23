@@ -95,4 +95,26 @@ export class Post extends BaseModel {
     const index = this.votes?.findIndex((v) => v.username === user.username);
     this.userVote = index > -1 ? this.votes[index].value : 0;
   }
+
+  @Field(() => String, { nullable: true })
+  @Expose()
+  get postImgUrl() {
+    return this.postImgUrn ? `${process.env.APP_URL}/${this.postImgUrn}` : null;
+  }
+
+  @Field(() => String, { nullable: true })
+  @Expose()
+  get subImgUrl() {
+    return this.sub?.subImgUrn
+      ? `${process.env.APP_URL}/subs/${this.sub.subImgUrn}`
+      : null;
+  }
+
+  // @Field(() => String, { nullable: true })
+  // @Expose()
+  // get subImg() {
+  //   return this.sub.subImgUrn
+  //     ? `${process.env.APP_URL}/public/${this.postImgUrn}`
+  //     : null;
+  // }
 }

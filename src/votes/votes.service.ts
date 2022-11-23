@@ -75,7 +75,13 @@ export class VotesService {
         relations: ['sub', 'comments', 'comments.votes', 'votes'],
       });
 
-      setUsersVoteOnPost(post, user, true);
+      setUsersVoteOnPost(post, user);
+
+      if (commentId) {
+        comment = post.comments.find((c) => c.id === commentId);
+        comment.setUserVote(user);
+        post.comments = [comment];
+      }
 
       return post;
     } catch (err) {

@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Post } from 'src/posts/entities/post.entity';
+import { Expose } from 'class-transformer';
 
 @Entity('subs')
 @ObjectType()
@@ -24,7 +25,7 @@ export class Sub extends BaseModel {
   title: string;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column({ nullable: true })
@@ -47,4 +48,12 @@ export class Sub extends BaseModel {
   @OneToMany(() => Post, (post) => post.sub)
   @Field(() => [Post])
   posts: Post[];
+
+  @Field(() => String, { nullable: true })
+  @Expose()
+  get subImgUrl() {
+    return this?.subImgUrn
+      ? `${process.env.APP_URL}/subs/${this.subImgUrn}`
+      : null;
+  }
 }

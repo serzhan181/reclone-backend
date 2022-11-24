@@ -12,6 +12,8 @@ import { uploadImg } from 'src/helpers/uploadImg';
 
 const publicSubs = join(__dirname, '..', '..', '..', 'public', 'subs');
 
+// TODO: Refactor so that create func reveives 2 params (CreateSubInput, UploadSubImages). Reuse what is already created.
+
 @Injectable()
 export class SubsService {
   constructor(@InjectRepository(Sub) private subRep: Repository<Sub>) {}
@@ -23,23 +25,38 @@ export class SubsService {
       const { name } = createSubInput;
       const subExists = await this.subRep.findBy({ name });
 
-      if (subExists.length) errors.name = 'Sub with that name already exists.';
+      console.log('exists', subExists);
 
-      if (Object.keys(errors).length) throw { errors };
+      if (subExists.length) {
+        errors.name = 'Sub with that name already exists.';
+      }
+
+      if (Object.keys(errors).length) {
+        throw { errors };
+      }
     } catch (err) {
+      console.log('inside catch');
       throw new HttpException(JSON.stringify(err), HttpStatus.BAD_REQUEST);
     }
 
     // Create sub
-    try {
-      const sub = this.subRep.create({ ...createSubInput, creator });
 
-      return sub.save();
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    let bannerUrn: string | null = null;
+    let subUrn: string | null = null;
 
-    return;
+    const { bannerImg = null, subImg = null } = createSubInput;
+
+    if (bannerImg) bannerUrn = await uploadImg(bannerImg, 'subs');
+    if (subImg) subUrn = await uploadImg(subImg, 'subs');
+
+    const sub = this.subRep.create({
+      ...createSubInput,
+      bannerUrn,
+      subImgUrn: subUrn,
+      creator,
+    });
+
+    return sub.save();
   }
 
   findAll() {

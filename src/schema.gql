@@ -49,6 +49,7 @@ type Sub {
   creator_name: String!
   creator: User!
   posts: [Post!]!
+  subImgUrl: String
 }
 
 type Post {

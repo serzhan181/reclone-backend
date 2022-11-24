@@ -1,5 +1,6 @@
+import { Subscription } from './subscription.entity';
 import { User } from 'src/users/entities/user.entity';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BaseModel } from 'src/entities/base-entity';
 import {
   Column,
@@ -49,11 +50,29 @@ export class Sub extends BaseModel {
   @Field(() => [Post])
   posts: Post[];
 
+  @Field(() => [Subscription], { nullable: true })
+  @OneToMany(() => Subscription, (subscription) => subscription.subscribedTo)
+  subscribers: Subscription[];
+
   @Field(() => String, { nullable: true })
   @Expose()
   get subImgUrl() {
     return this?.subImgUrn
       ? `${process.env.APP_URL}/subs/${this.subImgUrn}`
       : null;
+  }
+
+  @Field(() => Int)
+  @Expose()
+  get subsribersCount() {
+    return this.subscribers?.length || 0;
+  }
+
+  @Field(() => Boolean, { nullable: true })
+  protected isUserSubscribed: boolean;
+  setIsUserSubscribed(userId: number) {
+    this.isUserSubscribed = this.subscribers.some(
+      (s) => s.subscriber?.id === userId,
+    );
   }
 }

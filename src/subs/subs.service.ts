@@ -60,11 +60,17 @@ export class SubsService {
   }
 
   findAll() {
-    return this.subRep.find();
+    return this.subRep.find({ relations: ['subscribers'] });
   }
 
-  findOneByName(name: string) {
-    return this.subRep.findOneBy({ name });
+  async findOneByName(name: string, userId?: number) {
+    const sub = await this.subRep.findOne({
+      where: { name },
+      relations: ['subscribers', 'subscribers.subscriber'],
+    });
+
+    sub.setIsUserSubscribed(userId || -1);
+    return sub;
   }
 
   async uploadSubImages({ name, bannerImg, subImg }: UploadSubImages) {

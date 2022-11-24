@@ -35,6 +35,15 @@ type User {
   posts: [Post!]!
   votes: [Vote!]!
   profile_picture_urn: String
+  subscriptions: [Subscription!]
+}
+
+type Subscription {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  subscriber: User!
+  subscribedTo: Sub!
 }
 
 type Sub {
@@ -49,7 +58,10 @@ type Sub {
   creator_name: String!
   creator: User!
   posts: [Post!]!
+  subscribers: [Subscription!]
   subImgUrl: String
+  subsribersCount: Int!
+  isUserSubscribed: Boolean
 }
 
 type Post {
@@ -119,6 +131,8 @@ type Mutation {
   uploadSubImages(uploadSubImages: UploadSubImages!): Sub!
   updateSub(updateSubInput: UpdateSubInput!): Sub!
   removeSub(id: Int!): Sub!
+  subscribe(subName: String!): Subscription!
+  unsubscribe(subName: String!): Subscription!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!

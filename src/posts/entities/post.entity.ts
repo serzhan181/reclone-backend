@@ -109,12 +109,4 @@ export class Post extends BaseModel {
       ? `${process.env.APP_URL}/subs/${this.sub.subImgUrn}`
       : null;
   }
-
-  // @Field(() => String, { nullable: true })
-  // @Expose()
-  // get subImg() {
-  //   return this.sub.subImgUrn
-  //     ? `${process.env.APP_URL}/public/${this.postImgUrn}`
-  //     : null;
-  // }
 }

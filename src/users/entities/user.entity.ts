@@ -1,3 +1,4 @@
+import { Subscription } from './../../subs/entities/subscription.entity';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import {
   BaseEntity,
@@ -42,6 +43,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @Field({ nullable: true })
   profile_picture_urn: string;
+
+  @OneToMany(() => Subscription, (subscription) => subscription.subscriber)
+  @Field(() => [Subscription], { nullable: true })
+  subscriptions: Subscription[];
 
   @BeforeInsert()
   @Exclude()

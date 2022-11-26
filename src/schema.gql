@@ -105,7 +105,7 @@ type Query {
   users: [User!]
   user(username: String!): User!
   me: MeResponse
-  posts: [Post!]!
+  posts(forUserSubscribed: Boolean): [Post!]!
   post(getSinglePost: GetSinglePost!): Post!
   postsBySubName(subName: String!): [Post!]!
   subs: [Sub!]!

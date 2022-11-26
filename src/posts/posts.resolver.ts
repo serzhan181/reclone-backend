@@ -31,8 +31,12 @@ export class PostsResolver {
 
   @UseGuards(OptionalJwtAuthGuard)
   @Query(() => [Post], { name: 'posts' })
-  findAll(@UserDecorator() user: User) {
-    return this.postsService.findAll(user);
+  findAll(
+    @Args('forUserSubscribed', { type: () => Boolean, nullable: true })
+    forUserSubscribed = false,
+    @UserDecorator() user: User,
+  ) {
+    return this.postsService.findAll(user, forUserSubscribed);
   }
 
   @UseGuards(OptionalJwtAuthGuard)

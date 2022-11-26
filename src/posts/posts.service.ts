@@ -10,6 +10,7 @@ import { Post } from './entities/post.entity';
 import { join } from 'path';
 import { unlinkSync } from 'fs';
 import { setUsersVoteOnPost } from 'src/helpers/set-users-vote-post';
+import { Subscription } from 'src/subs/entities/subscription.entity';
 
 @Injectable()
 export class PostsService {
@@ -17,6 +18,8 @@ export class PostsService {
     @InjectRepository(Post) private postRep: Repository<Post>,
     @InjectRepository(User) private usersRep: Repository<User>,
     @InjectRepository(Sub) private subRep: Repository<Sub>,
+    @InjectRepository(Subscription)
+    private subscriptionRep: Repository<Subscription>,
   ) {}
 
   async create(createPostInput: CreatePostInput, user: User) {
@@ -40,13 +43,44 @@ export class PostsService {
     return this.postRep.save(post);
   }
 
-  async findAll(user: User) {
+  async findAll(user: User, forUserSubscribed: boolean) {
+    if (forUserSubscribed) {
+      return this.findAllUserSubscribed(user);
+    }
+
     const posts = await this.postRep.find({
       relations: ['user', 'votes', 'comments', 'comments.votes', 'sub'],
       order: { createdAt: 'DESC' },
     });
 
     posts.forEach((p) => p.setUserVote(user));
+    return posts;
+  }
+
+  async findAllUserSubscribed(user: User) {
+    const posts: Post[] = [];
+
+    const subscription = await this.subscriptionRep.find({
+      where: {
+        subscriber: { username: user.username },
+      },
+      relations: ['subscribedTo'],
+    });
+
+    const subscribedSubNames = subscription.map((s) => s.subscribedTo.name);
+
+    for (const subName of subscribedSubNames) {
+      const post = await this.postRep.findOne({
+        where: { subName },
+        relations: ['user', 'votes', 'comments', 'comments.votes', 'sub'],
+        order: { createdAt: 'DESC' },
+      });
+
+      posts.push(post);
+    }
+
+    posts.forEach((p) => p.setUserVote(user));
+
     return posts;
   }
 

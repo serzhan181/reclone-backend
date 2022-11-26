@@ -1,3 +1,4 @@
+import { Subscription } from './../subs/entities/subscription.entity';
 import { Sub } from './../subs/entities/sub.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Post } from './entities/post.entity';
@@ -10,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, User, Sub]),
+    TypeOrmModule.forFeature([Post, User, Sub, Subscription]),
     UsersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

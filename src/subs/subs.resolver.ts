@@ -34,9 +34,10 @@ export class SubsResolver {
     return this.subsService.findAll();
   }
 
+  @UseGuards(OptionalJwtAuthGuard)
   @Query(() => [Sub], { name: 'subsPopular' })
-  findSubsPopular() {
-    return this.subsService.findSubsPopular();
+  findSubsPopular(@UserDecorator() user: User) {
+    return this.subsService.findSubsPopular(user.id);
   }
 
   @UseGuards(OptionalJwtAuthGuard)

@@ -116,10 +116,15 @@ export class SubsService {
     return this.subRep.findOneBy({ name });
   }
 
-  async findSubsPopular() {
-    const subs = await this.subRep.find({
-      relations: ['subscribers'],
+  async findSubsPopular(userId: number) {
+    // Find 5 most popular communities
+    const [subs] = await this.subRep.findAndCount({
+      relations: ['subscribers', 'subscribers.subscriber'],
+      take: 5,
+      skip: 0,
     });
+
+    subs.forEach((s) => s.setIsUserSubscribed(userId || -1));
 
     return subs.sort((s1, s2) => s2.subsribersCount - s1.subsribersCount);
   }

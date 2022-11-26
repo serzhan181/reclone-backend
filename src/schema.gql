@@ -109,6 +109,7 @@ type Query {
   post(getSinglePost: GetSinglePost!): Post!
   postsBySubName(subName: String!): [Post!]!
   subs: [Sub!]!
+  subsPopular: [Sub!]!
   sub(name: String!): Sub!
   comments: [Comment!]!
   comment(id: Int!): Comment!

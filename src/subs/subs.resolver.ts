@@ -34,6 +34,11 @@ export class SubsResolver {
     return this.subsService.findAll();
   }
 
+  @Query(() => [Sub], { name: 'subsPopular' })
+  findSubsPopular() {
+    return this.subsService.findSubsPopular();
+  }
+
   @UseGuards(OptionalJwtAuthGuard)
   @Query(() => Sub, { name: 'sub' })
   findOne(

@@ -116,6 +116,14 @@ export class SubsService {
     return this.subRep.findOneBy({ name });
   }
 
+  async findSubsPopular() {
+    const subs = await this.subRep.find({
+      relations: ['subscribers'],
+    });
+
+    return subs.sort((s1, s2) => s2.subsribersCount - s1.subsribersCount);
+  }
+
   update(id: number, updateSubInput: UpdateSubInput) {
     return `This action updates a #${id} sub`;
   }

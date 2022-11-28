@@ -191,12 +191,10 @@ input UploadSubImages {
 }
 
 input UpdateSubInput {
-  name: String
-  description: String
-  title: String
-  subImg: Upload
+  name: String!
   bannerImg: Upload
-  id: Int!
+  subImg: Upload
+  description: String
 }
 
 input CreateCommentInput {

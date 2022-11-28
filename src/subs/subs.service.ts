@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UploadSubImages } from './dto/upload-sub-images';
 import { join } from 'path';
-import { unlinkSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { uploadImg } from 'src/helpers/uploadImg';
 
 const publicSubs = join(__dirname, '..', '..', '..', 'public', 'subs');
@@ -69,6 +69,12 @@ export class SubsService {
       relations: ['subscribers', 'subscribers.subscriber'],
     });
 
+    if (!sub)
+      throw new HttpException(
+        'There is not community with such name!',
+        HttpStatus.BAD_REQUEST,
+      );
+
     sub.setIsUserSubscribed(userId || -1);
     return sub;
   }
@@ -85,8 +91,9 @@ export class SubsService {
 
     if (Boolean(bannerImg)) {
       // delete previous image if exists
-      const oldFilename = sub.bannerUrn;
-      if (oldFilename) {
+      const oldFilename = sub?.bannerUrn;
+      console.log('bannerold', oldFilename);
+      if (oldFilename && existsSync(join(publicSubs, oldFilename))) {
         unlinkSync(join(publicSubs, oldFilename));
       }
 
@@ -95,8 +102,8 @@ export class SubsService {
     }
 
     if (Boolean(subImg)) {
-      const oldFilename = sub.subImgUrn;
-      if (oldFilename) {
+      const oldFilename = sub?.subImgUrn;
+      if (oldFilename && existsSync(join(publicSubs, oldFilename))) {
         unlinkSync(join(publicSubs, oldFilename));
       }
 
@@ -104,14 +111,8 @@ export class SubsService {
       subUrn = filename;
     }
 
-    const updatedSub = await this.subRep
-      .createQueryBuilder()
-      .update()
-      .set({ bannerUrn, subImgUrn: subUrn })
-      .where('name = :name', { name })
-      .execute();
-
-    console.log('UPDATED RESULT', updatedSub);
+    if (bannerUrn) await this.subRep.update({ name }, { bannerUrn });
+    if (subUrn) await this.subRep.update({ name }, { subImgUrn: subUrn });
 
     return this.subRep.findOneBy({ name });
   }
@@ -129,8 +130,14 @@ export class SubsService {
     return subs.sort((s1, s2) => s2.subsribersCount - s1.subsribersCount);
   }
 
-  update(id: number, updateSubInput: UpdateSubInput) {
-    return `This action updates a #${id} sub`;
+  async updateDescription(updateSubInput: UpdateSubInput) {
+    if (updateSubInput.description) {
+      await this.subRep.update(
+        { name: updateSubInput.name },
+        { description: updateSubInput.description },
+      );
+    }
+    return this.findOneByName(updateSubInput.name);
   }
 
   remove(id: number) {

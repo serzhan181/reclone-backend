@@ -60,6 +60,8 @@ export class PostsService {
   async findAllUserSubscribed(user: User) {
     const posts: Post[] = [];
 
+    if (!user) return posts;
+
     const subscription = await this.subscriptionRep.find({
       where: {
         subscriber: { username: user.username },
@@ -76,8 +78,12 @@ export class PostsService {
         order: { createdAt: 'DESC' },
       });
 
-      posts.push(post);
+      if (post) posts.push(post);
     }
+
+    console.log('posts', posts);
+
+    if (!posts.length) return posts;
 
     posts.forEach((p) => p.setUserVote(user));
 

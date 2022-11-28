@@ -1,8 +1,11 @@
-import { CreateSubInput } from './create-sub.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { UploadSubImages } from './upload-sub-images';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateSubInput extends PartialType(CreateSubInput) {
-  @Field(() => Int)
-  id: number;
+export class UpdateSubInput extends UploadSubImages {
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String, { nullable: true })
+  description?: string;
 }

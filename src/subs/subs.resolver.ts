@@ -57,9 +57,25 @@ export class SubsResolver {
     return this.subsService.uploadSubImages(uploadSubImages);
   }
 
+  @UseGuards(JwtAuthGuard, IsSubOwnerGuard('updateSubInput'))
   @Mutation(() => Sub)
-  updateSub(@Args('updateSubInput') updateSubInput: UpdateSubInput) {
-    return this.subsService.update(updateSubInput.id, updateSubInput);
+  async updateSub(@Args('updateSubInput') updateSubInput: UpdateSubInput) {
+    if (updateSubInput.bannerImg || updateSubInput.subImg) {
+      await this.subsService.uploadSubImages({
+        name: updateSubInput.name,
+        bannerImg: updateSubInput.bannerImg,
+        subImg: updateSubInput.subImg,
+      });
+    }
+
+    if (updateSubInput.description) {
+      await this.subsService.updateDescription({
+        name: updateSubInput.name,
+        description: updateSubInput.description,
+      });
+    }
+
+    return this.subsService.findOneByName(updateSubInput.name);
   }
 
   @Mutation(() => Sub)

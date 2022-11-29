@@ -60,6 +60,7 @@ type Sub {
   posts: [Post!]!
   subscribers: [Subscription!]
   subImgUrl: String
+  bannerImgUrl: String
   subsribersCount: Int!
   isUserSubscribed: Boolean
 }

@@ -62,6 +62,14 @@ export class Sub extends BaseModel {
       : null;
   }
 
+  @Field(() => String, { nullable: true })
+  @Expose()
+  get bannerImgUrl() {
+    return this?.bannerUrn
+      ? `${process.env.APP_URL}/subs/${this.bannerUrn}`
+      : null;
+  }
+
   @Field(() => Int)
   @Expose()
   get subsribersCount() {

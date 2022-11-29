@@ -108,7 +108,7 @@ type Query {
   posts(forUserSubscribed: Boolean): [Post!]!
   post(getSinglePost: GetSinglePost!): Post!
   postsBySubName(subName: String!): [Post!]!
-  subs: [Sub!]!
+  subs(searchSubsInput: SearchSubsInput): [Sub!]!
   subsPopular: [Sub!]!
   sub(name: String!): Sub!
   comments: [Comment!]!
@@ -118,6 +118,10 @@ type Query {
 input GetSinglePost {
   identifier: String!
   slug: String!
+}
+
+input SearchSubsInput {
+  term: String
 }
 
 type Mutation {

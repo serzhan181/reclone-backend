@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateSubInput } from './dto/create-sub.input';
 import { UpdateSubInput } from './dto/update-sub.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { UploadSubImages } from './dto/upload-sub-images';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
@@ -138,6 +138,14 @@ export class SubsService {
       );
     }
     return this.findOneByName(updateSubInput.name);
+  }
+
+  async findSubsSearch(term: string) {
+    return this.subRep.find({
+      where: {
+        name: Like(`%${term}%`),
+      },
+    });
   }
 
   remove(id: number) {

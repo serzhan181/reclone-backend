@@ -1,3 +1,4 @@
+import { SearchSubsInput } from './dto/search-subs.input';
 import { OptionalJwtAuthGuard } from './../auth/guards/optional-jwt-auth.guard';
 import { UploadSubImages } from './dto/upload-sub-images';
 import { User } from 'src/users/entities/user.entity';
@@ -30,7 +31,13 @@ export class SubsResolver {
   }
 
   @Query(() => [Sub], { name: 'subs' })
-  findAll() {
+  findAll(
+    @Args('searchSubsInput', { nullable: true }) search: SearchSubsInput,
+  ) {
+    if (search?.term) {
+      return this.subsService.findSubsSearch(search.term);
+    }
+
     return this.subsService.findAll();
   }
 

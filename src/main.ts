@@ -21,7 +21,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
-  await app.listen(+process.env.PORT);
+  await app.listen(process.env.PORT);
 }
 
 bootstrap();

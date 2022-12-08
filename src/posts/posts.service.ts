@@ -1,4 +1,4 @@
-import { uploadImg } from './../helpers/uploadImg';
+import { bucket } from 'src/utils/b2';
 import { Sub } from './../subs/entities/sub.entity';
 import { User } from 'src/users/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -23,11 +23,12 @@ export class PostsService {
   ) {}
 
   async create(createPostInput: CreatePostInput, user: User) {
+    console.log('creating post');
     const { postImg, subName } = createPostInput;
     let postImageFilename: string | null = null;
 
     if (Boolean(postImg)) {
-      const filename = await uploadImg(postImg);
+      const filename = await bucket.uploadImage(await postImg);
       postImageFilename = filename;
     }
 

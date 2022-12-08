@@ -1,3 +1,5 @@
+import { constructNativeImgUrl } from './../../helpers/construct-native-img-url';
+import { bucket } from 'src/utils/b2';
 import { Sub } from './../../subs/entities/sub.entity';
 import { Comment } from './../../comments/entities/comment.entity';
 import {
@@ -99,14 +101,14 @@ export class Post extends BaseModel {
   @Field(() => String, { nullable: true })
   @Expose()
   get postImgUrl() {
-    return this.postImgUrn ? `${process.env.APP_URL}/${this.postImgUrn}` : null;
+    return this.postImgUrn ? constructNativeImgUrl(this.postImgUrn) : null;
   }
 
   @Field(() => String, { nullable: true })
   @Expose()
   get subImgUrl() {
     return this.sub?.subImgUrn
-      ? `${process.env.APP_URL}/subs/${this.sub.subImgUrn}`
+      ? constructNativeImgUrl(this.sub.subImgUrn)
       : null;
   }
 }

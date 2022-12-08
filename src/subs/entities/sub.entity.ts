@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Post } from 'src/posts/entities/post.entity';
 import { Expose } from 'class-transformer';
+import { constructNativeImgUrl } from 'src/helpers/construct-native-img-url';
 
 @Entity('subs')
 @ObjectType()
@@ -57,17 +58,13 @@ export class Sub extends BaseModel {
   @Field(() => String, { nullable: true })
   @Expose()
   get subImgUrl() {
-    return this?.subImgUrn
-      ? `${process.env.APP_URL}/subs/${this.subImgUrn}`
-      : null;
+    return this?.subImgUrn ? constructNativeImgUrl(this.subImgUrn) : null;
   }
 
   @Field(() => String, { nullable: true })
   @Expose()
   get bannerImgUrl() {
-    return this?.bannerUrn
-      ? `${process.env.APP_URL}/subs/${this.bannerUrn}`
-      : null;
+    return this?.bannerUrn ? constructNativeImgUrl(this.bannerUrn) : null;
   }
 
   @Field(() => Int)

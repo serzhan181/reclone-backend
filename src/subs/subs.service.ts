@@ -1,3 +1,4 @@
+import { bucket } from 'src/utils/b2';
 import { Sub } from './entities/sub.entity';
 import { User } from 'src/users/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -6,13 +7,6 @@ import { UpdateSubInput } from './dto/update-sub.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { UploadSubImages } from './dto/upload-sub-images';
-import { join } from 'path';
-import { existsSync, unlinkSync } from 'fs';
-import { uploadImg } from 'src/helpers/uploadImg';
-
-const publicSubs = join(__dirname, '..', '..', '..', 'public', 'subs');
-
-// TODO: Refactor so that create func reveives 2 params (CreateSubInput, UploadSubImages). Reuse what is already created.
 
 @Injectable()
 export class SubsService {
@@ -46,8 +40,9 @@ export class SubsService {
 
     const { bannerImg = null, subImg = null } = createSubInput;
 
-    if (bannerImg) bannerUrn = await uploadImg(bannerImg, 'subs');
-    if (subImg) subUrn = await uploadImg(subImg, 'subs');
+    if (bannerImg)
+      bannerUrn = await bucket.uploadImage(await bannerImg, 'subs');
+    if (subImg) subUrn = await bucket.uploadImage(await subImg, 'subs');
 
     const sub = this.subRep.create({
       ...createSubInput,
@@ -91,24 +86,22 @@ export class SubsService {
 
     if (Boolean(bannerImg)) {
       // delete previous image if exists
-      const oldFilename = sub?.bannerUrn;
-      console.log('bannerold', oldFilename);
-      if (oldFilename && existsSync(join(publicSubs, oldFilename))) {
-        unlinkSync(join(publicSubs, oldFilename));
+      const fileId = sub?.bannerUrn;
+      console.log('bannerold', fileId);
+      if (fileId) {
+        await bucket.deleteImage(fileId);
       }
 
-      const filename = await uploadImg(bannerImg, 'subs');
-      bannerUrn = filename;
+      bannerUrn = await bucket.uploadImage(await bannerImg, 'subs');
     }
 
     if (Boolean(subImg)) {
-      const oldFilename = sub?.subImgUrn;
-      if (oldFilename && existsSync(join(publicSubs, oldFilename))) {
-        unlinkSync(join(publicSubs, oldFilename));
+      const fileId = sub?.subImgUrn;
+      if (fileId) {
+        await bucket.deleteImage(fileId);
       }
 
-      const filename = await uploadImg(subImg, 'subs');
-      subUrn = filename;
+      subUrn = await bucket.uploadImage(await subImg, 'subs');
     }
 
     if (bannerUrn) await this.subRep.update({ name }, { bannerUrn });

@@ -1,73 +1,50 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Reclone (clone of reddit, [sort of])
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[Live demo](reclone.vercel.app)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+It has main functionality of reddit, except for design.
+You can:
+- Create account
+- Create communities
+- Subscribe to communities
+- Create posts
+- Vote on posts
+- Vote on comments
+- Comment on posts
 
-## Description
+Other functionalities include
+- Searching and autocomplition of communities
+- Seperated main and feed tabs (feed is posts from communities you are subscribed to)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+I like this project and will provide new features/fix bugs as they appear in future.
 
-## Installation
+### ⚙ Main technologies i used:
+Frontend
+- Next.js
+- GraphQL
+- react-query
+- tailwindcss
+- zustand
+- react-hook-form
+- react-quill
 
-```bash
-$ npm install
-```
+Backend
+- Nestjs
+- TypeORM
+- PostgreSQL
+- GraphQL
 
-## Running the app
+### ⛑ Contribution
+I've been developing it alone, but open-source experience would be cool as well, so if you want to contribute feel free to.
 
-```bash
-# development
-$ npm run start
+Clone [frontend](https://github.com/serzhan181/reclone) repo <br>
+Clone [backend](https://github.com/serzhan181/reclone-backend) repo
 
-# watch mode
-$ npm run start:dev
+Installing frontend repo is pretty straightforward -> yarn install and you should be good
+To installing backend repo you have to:
+- Create database in your postgresql and name it *reclone_db*
+- Run migrations ```yarn typeorm migration:run -d typeOrm.config.ts```
+- Start dev server
 
-# production mode
-$ npm run start:prod
-```
+Remember, you have to run backend **first**, before running backend.
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

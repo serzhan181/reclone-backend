@@ -134,7 +134,7 @@ export class PostsService {
     }
 
     if (post?.postImgUrn) {
-      unlinkSync(join(__dirname, '..', 'public', post.postImgUrn));
+      await bucket.deleteImage(post.postImgUrn);
     }
 
     return post.remove();

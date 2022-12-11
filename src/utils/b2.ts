@@ -47,6 +47,14 @@ class Bucket {
       uploadAuthToken: upload.data.authorizationToken,
     });
 
+    console.log(`
+      dev logs:
+      file: ${file},
+      uploadUrl: ${upload.data.uploadUrl},
+      auth: ${upload.data.authorizationToken},
+      bucketId: ${process.env.BUCKET_ID}
+    `);
+
     console.log('file uploaded');
 
     return file.data.fileId;

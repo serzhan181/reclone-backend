@@ -14,7 +14,6 @@ class Bucket {
   async authorize() {
     try {
       await b2.authorize();
-      console.log('succesful authorization to backblaze');
     } catch (e) {
       console.log('Error:', e);
     }
@@ -22,6 +21,8 @@ class Bucket {
 
   async uploadImage(image: FileUpload, folderName?: string) {
     let buffer;
+
+    this.authorize();
     const filename = `${makeid(7)}${extname(image.filename)}`;
 
     await new Promise((res) => {
@@ -61,11 +62,13 @@ class Bucket {
   }
 
   async getFileNameById(fileId: string) {
+    this.authorize();
     const file = await b2.getFileInfo({ fileId });
     return file.data.fileName;
   }
 
   async deleteImage(fileId: string) {
+    this.authorize();
     try {
       const file = await b2.getFileInfo({ fileId });
 

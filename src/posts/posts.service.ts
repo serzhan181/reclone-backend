@@ -7,8 +7,6 @@ import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
-import { join } from 'path';
-import { unlinkSync } from 'fs';
 import { setUsersVoteOnPost } from 'src/helpers/set-users-vote-post';
 import { Subscription } from 'src/subs/entities/subscription.entity';
 
@@ -81,8 +79,6 @@ export class PostsService {
 
       if (post) posts.push(post);
     }
-
-    console.log('posts', posts);
 
     if (!posts.length) return posts;
 

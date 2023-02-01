@@ -1,4 +1,3 @@
-import { UsersService } from 'src/users/users.service';
 import { CreateUserInput } from './../users/dto/create-user.input';
 import { SignUpResponse } from './dto/signup-response';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -14,10 +13,7 @@ import { UserDecorator } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private authService: AuthService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)

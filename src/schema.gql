@@ -178,7 +178,7 @@ input UpdatePostInput {
   body: String
   subName: String
   postImg: Upload
-  id: Int!
+  id: String!
 }
 
 input CreateSubInput {
@@ -216,7 +216,7 @@ input UpdateCommentInput {
 }
 
 input VoteInput {
-  commentId: Int
-  postId: Int
+  commentId: String
+  postId: String
   value: Int!
 }

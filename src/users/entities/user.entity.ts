@@ -1,5 +1,5 @@
 import { Subscription } from './../../subs/entities/subscription.entity';
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import {
   BaseEntity,
   BeforeInsert,
@@ -17,8 +17,8 @@ import { Vote } from 'src/votes/entities/vote.entity';
 @ObjectType()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
-  id: number;
+  @Field(() => String)
+  id: string;
 
   @Column({ unique: true })
   @Field()

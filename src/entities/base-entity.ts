@@ -9,8 +9,8 @@ import {
 @ObjectType()
 export abstract class BaseModel extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
-  public id: number;
+  @Field(() => String)
+  public id: string;
 
   @CreateDateColumn()
   @Field(() => Date)

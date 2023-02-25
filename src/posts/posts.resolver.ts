@@ -65,7 +65,7 @@ export class PostsResolver {
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
   async removePost(
-    @Args('id', { type: () => Int }) id: number,
+    @Args('id', { type: () => Int }) id: string,
     @UserDecorator() user: User,
   ) {
     return this.postsService.remove(id, user);

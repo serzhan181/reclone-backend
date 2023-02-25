@@ -75,7 +75,7 @@ export class Sub extends BaseModel {
 
   @Field(() => Boolean, { nullable: true })
   protected isUserSubscribed: boolean;
-  setIsUserSubscribed(userId: number) {
+  setIsUserSubscribed(userId: string) {
     this.isUserSubscribed = this.subscribers.some(
       (s) => s.subscriber?.id === userId,
     );

@@ -58,7 +58,7 @@ export class SubsService {
     return this.subRep.find({ relations: ['subscribers'] });
   }
 
-  async findOneByName(name: string, userId?: number) {
+  async findOneByName(name: string, userId?: string) {
     const sub = await this.subRep.findOne({
       where: { name },
       relations: ['subscribers', 'subscribers.subscriber'],
@@ -70,7 +70,7 @@ export class SubsService {
         HttpStatus.BAD_REQUEST,
       );
 
-    sub.setIsUserSubscribed(userId || -1);
+    sub.setIsUserSubscribed(userId || '-1');
     return sub;
   }
 
@@ -110,7 +110,7 @@ export class SubsService {
     return this.subRep.findOneBy({ name });
   }
 
-  async findSubsPopular(userId: number) {
+  async findSubsPopular(userId: string) {
     // Find 5 most popular communities
     const [subs] = await this.subRep.findAndCount({
       relations: ['subscribers', 'subscribers.subscriber'],
@@ -118,7 +118,7 @@ export class SubsService {
       skip: 0,
     });
 
-    subs.forEach((s) => s.setIsUserSubscribed(userId || -1));
+    subs.forEach((s) => s.setIsUserSubscribed(userId || '-1'));
 
     return subs.sort((s1, s2) => s2.subsribersCount - s1.subsribersCount);
   }

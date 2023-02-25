@@ -2,11 +2,11 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class VoteInput {
-  @Field(() => Int, { nullable: true })
-  commentId?: number;
+  @Field(() => String, { nullable: true })
+  commentId?: string;
 
-  @Field(() => Int, { nullable: true })
-  postId?: number;
+  @Field(() => String, { nullable: true })
+  postId?: string;
 
   @Field(() => Int)
   value: -1 | 0 | 1;

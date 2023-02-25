@@ -108,11 +108,11 @@ export class PostsService {
     return posts;
   }
 
-  update(id: number, updatePostInput: UpdatePostInput) {
+  update(id: string, updatePostInput: UpdatePostInput) {
     return `This action updates a #${id} post`;
   }
 
-  async remove(id: number, user: User) {
+  async remove(id: string, user: User) {
     const post = await this.postRep.findOne({
       where: { id },
       relations: ['user'],

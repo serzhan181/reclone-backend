@@ -4,7 +4,7 @@ import { Vote } from './entities/vote.entity';
 import { VoteInput } from './dto/vote-input';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Post } from 'src/posts/entities/post.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from 'src/comments/entities/comment.entity';
 

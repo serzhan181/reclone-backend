@@ -18,6 +18,7 @@ export const moduleOptions: DataSourceOptions = {
   // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV === 'production',
   migrations: [`./dist/src/migrations/*{.ts,.js}`],
+  ssl: true,
 };
 
 export default new DataSource(moduleOptions);

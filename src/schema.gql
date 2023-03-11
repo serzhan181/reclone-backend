@@ -8,6 +8,7 @@ type Comment {
   updatedAt: DateTime!
   body: String!
   username: String!
+  user: User!
   voteScore: Int!
   userVote: Int
 }
@@ -132,7 +133,7 @@ type Mutation {
   signUp(signUpInput: CreateUserInput!): SignUpResponse!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
-  removePost(id: Int!): Post!
+  removePost(id: String!): Post!
   createSub(createSubInput: CreateSubInput!): Sub!
   uploadSubImages(uploadSubImages: UploadSubImages!): Sub!
   updateSub(updateSubInput: UpdateSubInput!): Sub!

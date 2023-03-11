@@ -19,6 +19,7 @@ export class Comment extends BaseModel {
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @Field(() => User)
   user: User;
 
   @ManyToOne(() => Post, (post) => post.comments, {

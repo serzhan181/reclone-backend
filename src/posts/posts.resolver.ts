@@ -1,8 +1,7 @@
 import { GetSinglePost } from './dto/get-single-post';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from './../users/users.service';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
@@ -13,10 +12,7 @@ import { OptionalJwtAuthGuard } from 'src/auth/guards/optional-jwt-auth.guard';
 
 @Resolver(() => Post)
 export class PostsResolver {
-  constructor(
-    private readonly postsService: PostsService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
@@ -65,7 +61,7 @@ export class PostsResolver {
   @Mutation(() => Post)
   @UseGuards(JwtAuthGuard)
   async removePost(
-    @Args('id', { type: () => Int }) id: string,
+    @Args('id', { type: () => String }) id: string,
     @UserDecorator() user: User,
   ) {
     return this.postsService.remove(id, user);

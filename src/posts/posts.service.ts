@@ -90,8 +90,21 @@ export class PostsService {
   async findOne(identifier: string, slug: string, user: User) {
     const post = await this.postRep.findOne({
       where: { identifier, slug },
-      relations: ['comments', 'comments.votes', 'votes', 'user', 'sub'],
+      relations: [
+        'comments',
+        'comments.votes',
+        'comments.user',
+        'votes',
+        'user',
+        'sub',
+      ],
       order: { comments: { createdAt: 'DESC' } },
+      select: {
+        user: {
+          username: true,
+          profile_picture_urn: true,
+        },
+      },
     });
 
     setUsersVoteOnPost(post, user, true);

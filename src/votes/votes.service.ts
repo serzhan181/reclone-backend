@@ -66,7 +66,7 @@ export class VotesService {
 
       // new value passed, update vote
       if (vote.value !== value) {
-        vote.value = value;
+        vote.value = +value;
         await vote.save();
       }
 
